@@ -14,7 +14,7 @@ void wspolczynniki_funkcji(double tablica_wspolczynnikow[])
         scanf_s("%lf", &liczba);
         tablica_wspolczynnikow[i] = liczba;
 
-        while (!tablica_wspolczynnikow[i]) { ////chodzi o wspoczlynnik b który musi byc rozny od zera 
+        while (!tablica_wspolczynnikow[i]) {
 
             printf("Wspolczynnik nie moze byc rowny zero\n");
             printf("Podaj inny wspolczynnik: \n");
@@ -280,7 +280,7 @@ int main()
                 zaklocenia(tablica_wynikowa, tablica_zaszumiona, szumy, rozmiar);
             }
             else {
-                printf("Nie mo¿na wygenerowac szumow poniewaz,\nnajpierw trzeba wygenerowac\nlub wczytac tablice wynikowa\n");
+                printf("Nie moï¿½na wygenerowac szumow poniewaz,\nnajpierw trzeba wygenerowac\nlub wczytac tablice wynikowa\n");
             }
             break;
 
