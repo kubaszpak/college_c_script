@@ -5,7 +5,7 @@
 
 struct obraz
 {
-    char *nazwa;
+    char nazwa[50];
     char standard[3];
     int wysokosc;
     int szerokosc;
@@ -19,6 +19,8 @@ struct baza_obrazow
     size_t len;
     size_t alloc;
 };
+
+void usun_baze(struct baza_obrazow *baza);
 
 int rozszerz(struct baza_obrazow *baza)
 {
@@ -36,7 +38,7 @@ int rozszerz(struct baza_obrazow *baza)
     return 1; //success
 }
 
-struct baza_obrazow *stworz_tablice_struktur(int poczatkowy_rozmiar)
+struct baza_obrazow *stworz_tablice_struktur(size_t poczatkowy_rozmiar)
 {
     struct baza_obrazow *baza = (struct baza_obrazow *)malloc(sizeof(struct baza_obrazow));
     baza->lista_obrazow = (struct obraz *)malloc(sizeof(struct obraz) * poczatkowy_rozmiar);
@@ -72,19 +74,28 @@ void usun_obraz(struct baza_obrazow *baza, int index)
     baza->len--;
 
     struct obraz *nowa_lista_obrazow = (struct obraz *)realloc(baza->lista_obrazow, baza->len * sizeof(struct obraz));
-    assert(nowa_lista_obrazow != NULL);
+    // assert(nowa_lista_obrazow != NULL);
+    if (nowa_lista_obrazow == NULL)
+    {
+        usun_baze(baza);
+        printf("Usuniete zostaly wszystkie obrazy w bazie. Program zostanie teraz zakonczony ...\n");
+        exit(0);
+    }
     baza->lista_obrazow = nowa_lista_obrazow;
 }
 
 struct obraz *wczytaj_obraz()
 {
     struct obraz *obr = (struct obraz *)malloc(sizeof(struct obraz));
+    // obr = &obraz;
     FILE *plik;
     char nazwa[50];
     printf("Podaj nazwe pliku: \n");
     scanf("%s", nazwa);
     strcat(nazwa, ".pgm");
-    obr->nazwa = nazwa;
+    strcpy(obr->nazwa, nazwa);
+    // *(obr->nazwa) = nazwa;
+    printf("Nazwa obrazu to %s.\n", obr->nazwa);
     plik = fopen(nazwa, "r");
     fscanf(plik, "%s", &(obr->standard));
     fscanf(plik, "%d %d", &(obr->szerokosc), &(obr->wysokosc));
@@ -145,9 +156,9 @@ void usun_baze(struct baza_obrazow *baza)
 
 void wypisz_obraz(struct obraz *obr)
 {
+    printf("%s \n", &(obr->standard));
     printf("%d %d\n", obr->szerokosc, obr->wysokosc);
     printf("%d \n", obr->glebia);
-    printf("%s \n", &(obr->standard));
     for (int i = 0; i < obr->wysokosc; i++)
     {
         for (int j = 0; j < obr->szerokosc; j++)
@@ -162,7 +173,7 @@ void wypisz_baze(struct baza_obrazow *baza)
 {
     for (int i = 0; i < baza->len; i++)
     {
-        printf("Obraz: %d \n", i);
+        printf("Obraz - index: %d, nazwa: %s.\n", i, &(baza->lista_obrazow[i].nazwa));
     }
 }
 
@@ -174,7 +185,7 @@ int main()
 
     while (1)
     {
-        printf("Menu:\n1. Dodaj obraz do bazy\n2. Wybierz aktywny obraz\n3. Zapisz do pliku\n4. Usun aktywny obraz\n5. Wypisz baze obrazow\n6. Zamknij\n");
+        printf("Menu:\n1. Dodaj obraz do bazy\n2. Zmien aktywny obraz\n3. Zapisz do pliku aktywny obraz\n4. Usun aktywny obraz\n5. Wypisz baze obrazow\n6. Wypisz aktywny obraz w terminalu\n7. Zamknij\n");
 
         if (index < 0)
         {
@@ -196,6 +207,7 @@ int main()
         case 1:
             dodaj_obraz(baza, wczytaj_obraz());
             printf("Pomyslnie odczytano obraz.\n");
+            index = baza->len - 1;
             break;
 
         case 2:
@@ -217,7 +229,7 @@ int main()
             }
 
             index = wybor2;
-            printf("Wybrany obraz to: %d %s\n", index, baza->lista_obrazow[index].nazwa);
+            printf("Wybrano obraz o index'ie: %d i nazwie %s.\n", index, &(baza->lista_obrazow[index].nazwa)); //  %s, baza->lista_obrazow[index].nazwa
             break;
 
         case 3:
@@ -235,6 +247,9 @@ int main()
             wypisz_baze(baza);
             break;
         case 6:
+            wypisz_obraz(&(baza->lista_obrazow[index]));
+            break;
+        case 7:
             usun_baze(baza);
             return 0;
 
