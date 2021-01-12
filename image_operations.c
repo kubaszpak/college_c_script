@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h>
 
 struct obraz
 {
@@ -177,6 +178,78 @@ void wypisz_baze(struct baza_obrazow *baza)
     }
 }
 
+// void negatyw(struct baza_obrazow* baza, int index) {
+
+//     struct obraz* obraz = &baza->lista_obrazow[index];
+//     for (int i = 0; i < obraz->szerokosc; i++) {
+//         for (int j = 0; j < obraz->wysokosc; j++) {
+//             obraz->piksele[i][j] = obraz->glebia - obraz->piksele[i][j]; //nie wiem tylko czyto ma sens dodawac nowy piksel, bo on chyba sie nigdzie nie bedzie zapisywał na
+//         }                                                                   //bo moze byc jest po prostu na starcie obraz->.piksel[i][j] na starcie. Do przedyskutowania 
+//     }
+// }
+
+// void sol_pieprz(struct baza_obrazow* baza, int index) {
+//     srand(time(NULL));
+//     struct obraz* obraz = &baza->lista_obrazow[index];
+//     for (int i = 0; i < obraz->szerokosc; i++) {
+//         for (int j = 0; j < obraz->wysokosc; j++) {
+//             if (rand() % 20 == 0) {
+//                 obraz->piksele[i][j] = rand() % 2 == 0; //nie wiem czy to znaczy ze wypisze wartosci minimalne 
+//             }
+//             else {
+//                 obraz->piksele[i][j] = obraz->glebia; //a to maksymalna głębię
+//             }
+//         }
+//     }
+// }
+
+// void zapisPliku(int* wyniki, int rozmiar)
+// {
+//     FILE* plik;
+//     char nazwa[50] = { 0 };
+//     printf("Podaj nazwe pliku csv do ktorego zapisany zostanie histogram:\n");
+//     scanf("%s", nazwa);
+//     plik = fopen(nazwa, "w");  //miejsce docelowe pliku w nawiasie // jesli sie nie otworzy zwraca null
+//     if (plik == NULL) // sprawdzamy dla dla pliku, a nie dla nazwa
+//     {
+//        printf("Coś poszło nie tak\n");// bo exit zwraca wartosc
+//     }
+//     //zabez
+//     for (int i = 0; i < rozmiar; i++) {
+//         fprintf(plik, "%d\n", wyniki[i]);
+//     }
+
+//     fclose(plik);
+// }
+
+// void histogram(struct baza_obrazow* baza, int index) {
+
+//     struct obraz* obraz = &baza->lista_obrazow[index];
+//     int* histogram = (int*)calloc(obraz->glebia + 1, sizeof(int));// max szarosc plus 0
+
+//     for (int i = 0; i < obraz->szerokosc; i++){
+//         for (int j = 0; j < obraz->wysokosc; j++){
+//             histogram[obraz->piksele[i][j]]++;// wartosc zwiekszana o 1 na konkrestnym miejscu// zabezpiecznie jest
+//         }
+//     }
+//     //zabezpieczenie przed wiekszym pikselem
+//     zapisPliku(histogram, obraz->glebia + 1);
+// }
+
+
+// void filtr_gaussa(struct baza_obrazow* baza, int index) {
+//     struct obraz* obraz = &baza->lista_obrazow[index];
+//     //tworzenie nowego obrazu, nowy obraz bedzie nosil nazwe "new"
+//     struct obraz* new = (struct obraz*)malloc(sizeof(struct obraz));
+//     if (new == NULL) {
+//         exit(0);
+//     }
+//     new->glebia = obraz->glebia;
+//     new->szerokosc = obraz->szerokosc;
+//     new->wysokosc = obraz->wysokosc;
+
+// }
+
 int main()
 {
     int wybor;
@@ -185,7 +258,7 @@ int main()
 
     while (1)
     {
-        printf("Menu:\n1. Dodaj obraz do bazy\n2. Zmien aktywny obraz\n3. Zapisz do pliku aktywny obraz\n4. Usun aktywny obraz\n5. Wypisz baze obrazow\n6. Wypisz aktywny obraz w terminalu\n7. Zamknij\n");
+        printf("Menu:\n1. Dodaj obraz do bazy\n2. Zmien aktywny obraz\n3. Zapisz do pliku aktywny obraz\n4. Usun aktywny obraz\n5. Wypisz baze obrazow\n6. Wypisz aktywny obraz w terminalu\n8. Zamknij\n");
 
         if (index < 0)
         {
@@ -250,6 +323,9 @@ int main()
             wypisz_obraz(&(baza->lista_obrazow[index]));
             break;
         case 7:
+
+            break;
+        case 8:
             usun_baze(baza);
             return 0;
 
